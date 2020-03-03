@@ -13,3 +13,10 @@ property3.save
 
 property3.address = "56 Buccleuch Street"
 property3.update
+
+p property3.find[0]
+
+p Property.find_by_address('1 Morrison Street')[0]
+
+# binding.pry
+nil

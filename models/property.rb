@@ -46,12 +46,41 @@ attr_reader :id
     db.close
   end
 
+  def find
+    db = PG.connect ( {dbname: 'property_agency', host: 'localhost'} )
+    sql = "SELECT * FROM properties WHERE id = $1 "
+    value = [@id]
+    db.prepare("find", sql)
+    result = db.exec_prepared("find", value)
+    db.close
+    return result
+  end
+
+  def Property.all
+    db = PG.connect( {dbname: 'property_agency', host: 'localhost'} )
+    sql = "SELECT * FROM properties"
+    db.prepare("all", sql)
+    properties = db.exec_prepared("all")
+    db.close
+    return properties.map {|property| Property.new(property)}
+  end
+
   def Property.delete_all
     db = PG.connect( {dbname: 'property_agency', host: 'localhost'} )
     sql = "DELETE FROM properties"
     db.prepare("delete_all", sql)
     db.exec_prepared("delete_all")
     db.close
+  end
+
+  def Property.find_by_address(address)
+    db = PG.connect( {dbname: 'property_agency', host: 'localhost'} )
+    sql = "SELECT * FROM properties WHERE address = $1"
+    value = [address]
+    db.prepare("find_by_address", sql)
+    result = db.exec_prepared("find_by_address", value)
+    db.close
+    return result
   end
 
 end
